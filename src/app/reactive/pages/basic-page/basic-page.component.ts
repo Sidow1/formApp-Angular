@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ValidatorsService } from 'src/app/shared/service/validators.service';
 
 const gtx1650 = {
   name: 'GTX 1650',
@@ -24,17 +25,18 @@ export class BasicPageComponent implements OnInit {
     stock: [0, [Validators.required, Validators.min(0)]],
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private validatorsService: ValidatorsService
+  ) {}
   ngOnInit(): void {
     // this.myForm.reset(gtx1650);
   }
 
   isValidField(field: string): boolean | null {
-    return (
-      this.myForm.controls[field].errors && this.myForm.controls[field].touched
-    );
+    return this.validatorsService.isValidField(this.myForm, field);
   }
-
+  //TODO: Refactorizar
   getFieldError(field: string): string | null {
     if (!this.myForm.controls[field]) return null;
 
